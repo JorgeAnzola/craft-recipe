@@ -390,6 +390,83 @@ class Recipe extends Model
         return $result;
     }
 
+
+    public function getUnconvertedIngredients($serving = 0, $raw = true)
+    {
+        $result = [];
+
+        if ($this->ingredients != '') {
+            foreach ($this->ingredients as $row) {
+                $convertedUnits = "";
+                $ingredient = "";
+                if ($row['quantity']) {
+                    // Multiply the quantity by how many servings we want
+                    $multiplier = 1;
+                    if ($serving > 0) {
+                        $multiplier = $serving / $this->serves;
+                    }
+                    $quantity = $row['quantity'] * $multiplier;
+                    $originalQuantity = $quantity;
+
+                    if (in_array($row['units'], ['tsps', 'tbsps', 'flozs', 'cups', 'ozs'])) {
+                        $quantity = $this->convertToFractions($quantity);
+                    } else {
+                        $quantity = round($quantity, 1);
+                    }
+
+                    $ingredient .= $quantity;
+
+                    if ($row['units']) {
+                        $units = $row['units'];
+                        if ($convertedUnits) {
+                            $units = $convertedUnits;
+                        }
+                        if ($originalQuantity <= 1) {
+                            $units = rtrim($units);
+                            $units = rtrim($units, 's');
+                        }
+                        $ingredient .= " ".$units;
+                    }
+                }
+                if ($row['ingredient']) {
+                    $ingredient .= " ".$row['ingredient'];
+                }
+                if ($raw) {
+                    $ingredient = Template::raw($ingredient);
+                }
+                array_push($result, $ingredient);
+            }
+        }
+
+        return $result;
+    }
+    
+    public function groupIngredients(array $ingredients): array
+    {
+        $ingredientGroups = [];
+
+        $group = '';
+
+        foreach ($ingredients as $ingredient) {
+
+            $re = '/(?<=\[\[)(.*)(?=\]\])/m';
+
+            $str = $ingredient;
+
+            preg_match_all($re, $str, $matches, PREG_SET_ORDER, 0);
+
+            if (isset($matches[0][0])) {
+                $group = $matches[0][0];
+                continue;
+            }
+
+            $ingredientGroups[$group][] = $ingredient;
+
+        }
+
+        return $ingredientGroups;
+    }
+
     /**
      * Convert decimal numbers into fractions
      *
@@ -413,11 +490,11 @@ class Recipe extends Model
             case 0.33:
                 $fraction = " &frac13;";
                 break;
-                
+
             case 0.66:
                 $fraction = " &frac23;";
                 break;
-            
+
             case 0.165:
                 $fraction = " &frac16;";
                 break;
