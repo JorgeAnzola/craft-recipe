@@ -421,6 +421,21 @@ class Recipe extends Model
                         if ($convertedUnits) {
                             $units = $convertedUnits;
                         }
+
+                        // TODO[] - 2019-08-10 by Jorge - Change to translation file
+
+                        switch ($units) {
+                            case 'cups';
+                                $units = 'tazas';
+                                break;
+                            case 'tsps';
+                                $units = 'cucharaditas';
+                                break;
+                            case 'tbsps';
+                                $units = 'cucharadas';
+                                break;
+                        }
+
                         if ($originalQuantity <= 1) {
                             $units = rtrim($units);
                             $units = rtrim($units, 's');
