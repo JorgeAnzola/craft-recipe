@@ -423,8 +423,16 @@ class Recipe extends Model
                         }
 
                         // TODO[] - 2019-08-10 by Jorge - Change to translation file
-
                         switch ($units) {
+                            case 'ls';
+                                $units = 'litros';
+                                break;
+                            case 'mls';
+                                $units = 'mililitros';
+                                break;
+                            case 'gs';
+                                $units = 'gramos';
+                                break;
                             case 'cups';
                                 $units = 'tazas';
                                 break;
