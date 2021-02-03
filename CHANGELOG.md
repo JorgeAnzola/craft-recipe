@@ -1,5 +1,42 @@
 # Recipe Changelog
 
+## 1.2.1 - 2021.01.28
+### Added
+* Added sodium content to nutrition facts template.
+* Implemented `useFieldset` for Craft 3.6
+
+### Changed
+* Non-imperial units are converted to nice fractions too
+* Nice fraction now has a space before it
+* Changed fraction precision to `1`
+
+## 1.2.0 - 2020.11.04
+### Added
+* Added support for importing recipes (including ingredients, directions and ratings) using Feed Me.
+
+## 1.1.3 - 2020.05.25
+### Fixed
+* Add plural for grams and remove cups abreviation
+* Correct prefix of 0 for measurements and use 'cups' instead of c
+
+## 1.1.2 - 2020.04.16
+### Fixed
+* Fixed Asset Bundle namespace case
+
+## 1.1.1 - 2020.04.06
+### Changed
+* An error is no longer logged if there isn't a frontend template for the Nutrition Facts
+* Updated missing translations
+
+## 1.1.0 - 2020.04.03
+### Added
+* Added support for imperial pounds and metric kilograms
+* Added support for passing in an image transform to `.getImageUrl()`
+
+### Fixed
+* Fixed errant display of the 1.66 quantity by rounding the mantissa so we can do a floating point comparison without weirdness, per: https://www.php.net/manual/en/language.types.float.php#113703
+* Fix the abbreviations to be be the same whether singular or plural as per [Measurement Abbreviations](https://abbreviations.yourdictionary.com/articles/measurement-abbreviations.html)
+
 ## 1.0.11 - 2019.07.10
 ### Changed
 * Add support for 2/3 fraction
